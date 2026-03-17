@@ -46,7 +46,7 @@ model ProcessingHistory {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   totalCount   Int
   totalValue   Float
-  labeledImage String
+  labeledImage String?  // ทำให้ optional
   createdAt    DateTime @default(now())
 
   userId String   @db.ObjectId
