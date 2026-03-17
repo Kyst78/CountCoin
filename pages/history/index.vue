@@ -20,12 +20,20 @@
               เลือก {{ selectedItems.length }} รายการ
             </p>
           </div>
-          <button
-            @click="generateReport"
-            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            สร้างรายงาน
-          </button>
+          <div class="flex space-x-3">
+            <button
+              @click="deleteSelected"
+              class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+            >
+              ลบรายการที่เลือก
+            </button>
+            <button
+              @click="generateReport"
+              class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              สร้างรายงาน
+            </button>
+          </div>
         </div>
 
         <div v-if="pending" class="text-center p-10">
@@ -122,7 +130,7 @@ const totalSelectedValue = computed(() => {
     return 0;
   }
   return selectedItems.value.reduce((sum, id) => {
-    const item = historyList.value!.find((h) => h.id === id);
+    const item = historyList.value!.find((h: any) => h.id === id);
     return sum + (item?.totalValue || 0);
   }, 0);
 });
@@ -132,5 +140,35 @@ const generateReport = () => {
   if (selectedItems.value.length === 0) return;
   const ids = selectedItems.value.join(",");
   navigateTo(`/report?ids=${ids}`);
+};
+
+// Function to delete selected history items
+const deleteSelected = async () => {
+  if (selectedItems.value.length === 0) return;
+  
+  // แสดง confirm dialog
+  const confirmed = confirm(`คุณต้องการลบประวัติที่เลือก (${selectedItems.value.length} รายการ) ใช่หรือไม่?`);
+  if (!confirmed) return;
+  
+  try {
+    // ลบทีละรายการ
+    for (const id of selectedItems.value) {
+      await $fetch(`/api/history/${id}`, {
+        method: 'DELETE' as any
+      });
+    }
+    
+    // รีเฟรชข้อมูล
+    await refreshNuxtData();
+    
+    // ล้างการเลือก
+    selectedItems.value = [];
+    
+    // แสดงข้อความสำเร็จ
+    alert('ลบประวัติเรียบร้อยแล้ว');
+  } catch (error: any) {
+    console.error('Failed to delete history:', error);
+    alert('ไม่สามารถลบประวัติได้ กรุณาลองใหม่');
+  }
 };
 </script>
