@@ -361,9 +361,16 @@ const processImage = async () => {
     // 2. <<-- เพิ่มส่วนนี้ -->>
     // หลังจากประมวลผลสำเร็จ ให้บันทึกผลลัพธ์ลง DB ผ่าน Nuxt Server API
     try {
+      // ส่งเฉพาะข้อมูลที่จำเป็น ไม่ส่ง labeledImage เพื่อลดขนาด payload
+      const historyData = {
+        count: data.count,
+        totalValue: data.totalValue,
+        details: data.details,
+      };
+      
       const savedHistory = await $fetch("/api/history", {
         method: "POST",
-        body: data, // ส่งผลลัพธ์ทั้งหมดไปบันทึก
+        body: historyData,
       });
       console.log("History saved:", savedHistory);
       // อาจจะดีกว่าถ้าไปที่หน้ารายละเอียดเลย

@@ -9,14 +9,15 @@ export default defineEventHandler(async (event) => {
   }
 
   const userId = session.user.id;
-  const { count, totalValue, details, labeledImage } =
+  const { count, totalValue, details } =
     await readValidatedBody(event, (body) => historySaveSchema.parse(body));
 
+  // ไม่เก็บ labeledImage ใน DB เพื่อลขนาด payload
   const newHistory = await db.processingHistory.create({
     data: {
       totalCount: count,
       totalValue: totalValue,
-      labeledImage: labeledImage,
+      labeledImage: null, // ไม่เก็บรูปใน DB
       user: {
         connect: { id: userId },
       },

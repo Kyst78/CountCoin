@@ -22,7 +22,7 @@ export const historySaveSchema = z.object({
   count: z.number().int().positive(),
   totalValue: z.number().nonnegative(),
   details: z.array(coinDetailSchema).min(1),
-  labeledImage: z.string().min(1),
+  // ไม่ต้องส่ง labeledImage เพื่อลดขนาด payload
 });
 
 export type LoginSchema = z.output<typeof loginSchema>;
