@@ -347,7 +347,7 @@ const shareReport = async () => {
         text: shareText,
       });
     } catch (error) {
-      console.log("การแชร์ถูกยกเลิก");
+      // User cancelled share
     }
   } else {
     // Fallback: copy to clipboard

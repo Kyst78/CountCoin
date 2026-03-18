@@ -1,75 +1,117 @@
-# Nuxt Minimal Starter
+# 🪙 CoinCD - Coin Detection App
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+AI-powered coin detection application using YOLOv8 and FastAPI.
+
+## Features
+
+- 🤖 **AI Detection**: Detect coins in images using YOLOv8
+- 💰 **Value Calculation**: Automatically calculate total coin value
+- 📊 **History Tracking**: Track and manage detection history
+- 📈 **Report Generation**: Generate reports from selected history
+- 🔐 **Authentication**: Email/password and GitHub OAuth login
+- 🗑️ **Delete History**: Remove unwanted detection records
+
+## Architecture
+
+- **Frontend**: Nuxt 3 (Vue 3) - Deployed on Vercel
+- **Backend**: FastAPI + YOLOv8 - Deployed on Hugging Face Spaces
+- **Database**: MongoDB Atlas
+- **AI Model**: Custom YOLOv8 trained on coin images
 
 ## Setup
 
-Make sure to install dependencies:
+### Prerequisites
+- Node.js 18+
+- MongoDB Atlas account
+- Hugging Face account (for backend deployment)
 
+### 1. Clone and Install
 ```bash
-# npm
-npm install
-
-# pnpm
+git clone https://github.com/Kyst78/CoinCD.git
+cd CoinCD
 pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+### 2. Environment Variables
+Copy `.env.example` to `.env` and configure:
 
 ```bash
-# npm
-npm run dev
+# Database
+DATABASE_URL="mongodb+srv://..."
 
-# pnpm
+# AI Service (HF Spaces)
+NUXT_AI_SERVICE_URL="https://your-space.hf.space"
+
+# Authentication
+NUXT_SESSION_PASSWORD="random_32_char_string"
+NUXT_OAUTH_GITHUB_CLIENT_ID="github_client_id"
+NUXT_OAUTH_GITHUB_CLIENT_SECRET="github_client_secret"
+
+# Cloudinary (optional)
+NUXT_PUBLIC_CLOUDINARY_CLOUD_NAME="..."
+NUXT_PUBLIC_UPLOAD_PRESET="..."
+NUXT_CLOUDINARY_API_KEY="..."
+NUXT_CLOUDINARY_API_SECRET="..."
+```
+
+### 3. Database Setup
+```bash
+npx prisma db push
+npx prisma generate
+```
+
+### 4. Development
+```bash
 pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+## Deployment
 
-Build the application for production:
+### Frontend (Vercel)
+1. Connect GitHub repo to Vercel
+2. Set environment variables in Vercel dashboard
+3. Deploy automatically
 
-```bash
-# npm
-npm run build
+### Backend (Hugging Face Spaces)
+1. Create new Space: https://huggingface.co/spaces
+2. Upload files from `/python` folder:
+   - `simple_app.py`
+   - `requirements.txt`
+   - `best.pt`
+   - `README.md`
+3. Set HF Spaces configuration to use Gradio SDK
+4. Deploy and copy the URL
 
-# pnpm
-pnpm build
+## API Endpoints
 
-# yarn
-yarn build
+### Backend (FastAPI)
+- `POST /api/process-image` - Upload image for coin detection
 
-# bun
-bun run build
-```
+### Frontend (Nuxt)
+- `GET /api/history` - Get user history
+- `POST /api/history` - Save detection result
+- `DELETE /api/history/[id]` - Delete history item
 
-Locally preview production build:
+## Supported Coins
 
-```bash
-# npm
-npm run preview
+- 0.25, 0.5, 1, 2, 5, 10 units
 
-# pnpm
-pnpm preview
+## Tech Stack
 
-# yarn
-yarn preview
+- **Frontend**: Nuxt 3, Vue 3, TailwindCSS, Nuxt UI
+- **Backend**: FastAPI, Uvicorn, OpenCV, Ultralytics
+- **Database**: MongoDB, Prisma
+- **Deployment**: Vercel, Hugging Face Spaces
+- **Authentication**: Nuxt Auth Utils
 
-# bun
-bun run preview
-```
+## Contributing
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+1. Fork the repository
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Create Pull Request
+
+## License
+
+MIT License

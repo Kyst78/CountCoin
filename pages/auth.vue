@@ -39,7 +39,7 @@ async function login(event: FormSubmitEvent<LoginSchema>) {
       body: event.data,
     });
 
-    console.log("Login response:", response); // Debug log
+    
 
     // Show success message
     showMessage({
@@ -70,7 +70,7 @@ async function register(event: FormSubmitEvent<RegisterSchema>) {
       body: event.data,
     });
 
-    console.log("Register response:", response); // Debug log
+    
 
     // Show success message
     showMessage({
